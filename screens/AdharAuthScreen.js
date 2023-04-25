@@ -1,23 +1,35 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,Image } from 'react-native';
 import axios from 'axios';
 import background_img from '../assets/background_login.jpg';
 import block_logo from '../assets/blockchain_logo.png';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from "react-redux";
+import { setUserData } from "../store/userSlice";
 
-const AdharAutherization = () => {
+const AdharAuthScreen = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  
   const [adharno, setAdharNo] = useState('');
   const [mobileNo, setMobileNo] = useState('');
 
-  const handleAdharAuth = async () => {
+  const storeUser = useCallback(async(user) => {
+    dispatch(setUserData(user));
+  },[dispatch])
 
+  const handleAdharAuth = async () => {
     try{
-      const response = await axios.post('http://localhost:3000/api/adharAuth',  
-        JSON.stringify({adharno:adharno}), 
+      const response = await axios.post('http://192.168.29.192:3000/api/adharAuth', 
+        {adharno},
       );
-      console.log(response);
-      setMobileNo(response.data.mobileNumber);
-    }
-    catch(error) {
+      console.log(response.data.user);
+      setMobileNo(response.data.user.mobileNumber);
+
+      storeUser(response.data.user);
+      navigation.navigate('OTP');
+
+    }catch(error) {
       console.log(error);
      
     }
@@ -41,7 +53,7 @@ const AdharAutherization = () => {
         <TouchableOpacity style={styles.button} onPress={handleAdharAuth}>
           <Text style={styles.buttonText}>Verify Adhar</Text>
         </TouchableOpacity>
-        {mobileNo ? <Text>Your mobile number is: {mobileNo}</Text> : null}
+        {mobileNo ? <Text>{'\n'}Your mobile number is: {mobileNo}</Text> : null}
       </View>
 
     </View>
@@ -129,4 +141,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AdharAutherization;
+export default AdharAuthScreen;

@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 const HomeUI = () => {
   return (
     
-      <Tab.Navigator>
+    <Tab.Navigator>
         <Tab.Screen name="Election" 
 		component={ElectionScreen} 
 		options={{

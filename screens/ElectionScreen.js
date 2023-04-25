@@ -1,7 +1,13 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet,Text,Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import {NavigationContainer } from '@react-navigation/native';
+ 
 
 const ElectionScreen = () => {
+  const navigation = useNavigation();
+
+  
   const elections = [
     { id: 1, name: 'Election 1', date: 'April 25, 2023', location: 'Andheri' },
     { id: 2, name: 'Election 2', date: 'May 1, 2023', location: 'Ghatkopar' },
@@ -12,7 +18,9 @@ const ElectionScreen = () => {
   ];
 
   return (
+    
     <ScrollView style={styles.container}>
+
       {elections.map((election) => (
         <View key={election.id} style={styles.card}>
           <View style={styles.header}>
@@ -21,13 +29,20 @@ const ElectionScreen = () => {
           </View>
           <View style={styles.footer}>
             <Text style={styles.location}>{election.location}</Text>
-            <Button title="View Details" />
+            <Button title="View Details" 
+            onPress={()=>
+            {
+              navigation.navigate('DetailsScreen',{electionName: election.name})
+            }}/>
           </View>
         </View>
       ))}
     </ScrollView>
   );
 };
+
+export default ElectionScreen;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -65,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ElectionScreen;
+

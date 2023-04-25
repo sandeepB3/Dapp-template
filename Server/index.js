@@ -8,14 +8,16 @@ require('./db');
 require('./models/User');
 
 const adharAuth = require('./routes/AdharAutherization');
-
+const otpAuth = require('./routes/OtpAutherization');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(adharAuth);
+app.use(otpAuth);
 
 app.get('/',(req,res) =>{
-    res.send('this is index.js');
+    res.send('This is index.js');
 })
 
 app.listen(port, ()=>{
